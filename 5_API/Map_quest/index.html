@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Mapquest example</title>
+    <style>
+      #map {
+        width: 600px;
+        height: 600px;
+      }
+    </style>
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"
+    />
+    <script>
+      // 1. The basic part of the example
+      var L;
+
+      window.onload = function() {
+        L.mapquest.key = "ADD-YOUR-KEY-HERE";
+
+        // 'map' refers to a <div> element with the ID map
+        // https://developer.mapquest.com/documentation/mapquest-js/v1.3/l-mapquest-tile-layer/
+        let map = L.mapquest.map("map", {
+          center: [34.0522, -118.2437], // N & E are positive, S & W are negative
+          layers: L.mapquest.tileLayer("map"),
+          zoom: 12
+        });
+
+        // add custom marker
+        L.marker([34.1184, -118.3004], {
+          icon: L.mapquest.icons.marker({
+            primaryColor: '#22407F',
+            secondaryColor: '#3B5998',
+            shadow: true,
+            size: 'md',
+            symbol: 'A'
+          })
+        })
+          .bindPopup('This is the Griffith Observatory!')
+          .addTo(map);
+
+        // add map controls and the control position in pane
+        map.addControl(L.mapquest.control({position: "bottomright"}));
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Simple Mapquest example</h1>
+
+    <div id="map"></div>
+  </body>
+</html>

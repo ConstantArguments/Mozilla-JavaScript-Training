@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Canvas</title>
+    <style>
+      body {
+        /* removes scroll bars */
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas class="myCanvas">
+      <p>Add suitable fallback text here.</p>
+    </canvas>
+    <script>
+
+      const canvas = document.querySelector(".myCanvas");
+      const width = canvas.width = window.innerWidth;
+      const height = canvas.height = window.innerHeight;
+
+      let ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "rgb(0,0,0)";
+      ctx.fillRect(0,0, width, height);
+
+      // moves the origin point of the canvas
+      ctx.translate(width/2, height/2);
+
+      let image = new Image();
+      // image respectfully borrowed from Mike Thomas' http://atomicrobotdesign.com/blog/htmlcss/create-a-sprite-sheet-walk-cycle-using-using-css-animation/
+      image.src = "walk-right.png";
+      image.onload = draw;
+
+      let sprite = 0;
+      let posX = 0;
+
+      /*
+      The image contains six sprites that make up the whole walking sequence —
+        * Each one is 102 pixels wide and 148 pixels high.
+        * To display each sprite cleanly we will have to use drawImage() to chop out a single sprite image.
+        * The X coordinate of the slice will have to be a multiple of 102, and the Y coordinate will always be 0.
+        * For this, the slice size will always be 102 by 148 pixels.
+      */
+      function draw() {
+        // clears the canvas to prepare for drawing each frame
+        ctx.fillRect(-(width/2), -(height/2), width, height);
+        // draw image
+        /*
+        * We specify image as the image to embed.
+        * Parameters 2 and 3 specify the top-left corner of the slice to cut out of the source image,
+          with the X value as sprite multiplied by 102 (where sprite is the sprite number between 0 and 5) and the Y value always 0.
+        * Parameters 4 and 5 specify the size of the slice to cut out — 102 pixels by 148 pixels.
+        * Parameters 6 and 7 specify the top-left corner of the box into which to draw the slice on the canvas
+          — the X position is 0 + posX, meaning that we can alter the drawing position by altering the posX value.
+        * Parameters 8 and 9 specify the size of the image on the canvas. We just want to keep its original size, so
+          we specify 102 and 148 as the width and height.
+        */
+        ctx.drawImage(image, (sprite * 102), 0, 102, 148, 0 + posX, -74, 102, 148);
+
+        // update the sprite on every 13th frame, or roughly about 5 frames a second
+        if (posX % 13 === 0) {
+          // sprite numbers run from 0 to 5
+          if (sprite === 5) {
+            // reset sprite back to 0
+            sprite = 0;
+          } else {
+            // increment by one until back to 5
+            sprite++;
+          }
+        }
+
+        // change the posX value on each frame
+
+        // Walk
+        if (posX > width / 2) { // did it walk off the screen?
+          newStartPos = -((width / 2) + 102); // restart just off the left of the screen
+          posX = Math.ceil(newStartPos / 13) * 13; // ensures posX % 13 === 0 is possible
+          console.log(posX);
+        } else {
+          posX += 2; // walk to right
+        }
+
+        // // MOONWALK instead?
+        // if (posX < -(width / 2)) { // did it walk off the screen?
+        //   newStartPos = ((width / 2) + 102); // restart just off the left of the screen
+        //   posX = Math.ceil(newStartPos / 13) * 13; // ensures posX % 13 === 0 is possible
+        //   console.log(posX);
+        // } else {
+        //   posX -= 3; // moonwalk to left
+        // }
+
+        window.requestAnimationFrame(draw);
+      }
+
+    </script>
+  </body>
+</html>

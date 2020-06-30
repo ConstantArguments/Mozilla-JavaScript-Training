@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Canvas</title>
+    <style>
+      body {
+        /* removes scroll bars */
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas class="myCanvas">
+      <p>Add suitable fallback text here.</p>
+    </canvas>
+    <script>
+
+      const canvas = document.querySelector(".myCanvas");
+      const width = canvas.width = window.innerWidth;
+      const height = canvas.height = window.innerHeight;
+
+      let ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "rgb(0,0,0)";
+      ctx.fillRect(0,0, width, height);
+
+      // moves the origin point of the canvas
+      ctx.translate(width/2, height/2);
+
+      function degToRad(degrees) {
+        return degrees * Math.PI / 180;
+      }
+
+      function randomNum(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + (min);
+      }
+
+      let length = 250;
+      let moveOffset = 20;
+
+      /*
+      On each iteration:
+        * Set the fillStyle to be a shade of slightly transparent purple, which changes each time based on the value of length.
+          As you'll see later the length gets smaller each time the loop runs, so the effect here is that the color gets
+          brighter with each successive triangle drawn.
+        * Begin the path.
+        * Move the pen to a coordinate of (moveOffset, moveOffset);
+          This variable defines how far we want to move each time we draw a new triangle.
+        * Draw a line to a coordinate of (moveOffset+length, moveOffset). This draws a line of length length parallel to the X axis.
+        * Calculate the triangle's height, as before.
+        * Draw a line to the downward-pointing corner of the triangle, then draw a line back to the start of the triangle.
+        * Call fill() to fill in the triangle.
+        * Update the variables that describe the sequence of triangles, so we can be ready to draw the next one.
+          We decrease the length value by 1, so the triangles get smaller each time; increase moveOffset by a small amount
+          so each successive triangle is slightly further away, and use another new function, rotate(), which allows us to
+          rotate the entire canvas! We rotate it by 5 degrees before drawing the next triangle.
+      */
+      for (var i = 0; i < length; i++) {
+        ctx.fillStyle = `rgba(${225-length},0,${225-length},0.9)`;
+        ctx.beginPath();
+        ctx.moveTo(moveOffset, moveOffset);
+        ctx.lineTo(moveOffset + length, moveOffset);
+        let triHeight = length / 2 * Math.tan(degToRad(60));
+        ctx.lineTo(moveOffset + (length / 2), moveOffset + triHeight);
+        ctx.lineTo(moveOffset, moveOffset);
+        ctx.fill();
+
+        length--;
+        moveOffset += 0.7;
+        ctx.rotate(degToRad(5));
+      }
+
+    </script>
+  </body>
+</html>

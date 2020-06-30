@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Function library example</title>
+    <style>
+      input {
+        font-size: 2em;
+        margin: 10px 1px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <input class="numberInput" type="text" />
+    <pre></pre>
+
+    <script>
+      var input = document.querySelector(".numberInput");
+      var para = document.querySelector("pre");
+
+      function squared(num) {
+        return num * num;
+      }
+
+      function cubed(num) {
+        return num * num * num;
+      }
+
+      function factorial(num) {
+        let x = num;
+        while (x > 1) {
+          num *= x - 1;
+          x--;
+        }
+        return num;
+      }
+
+      function cubeRoot(num) {
+        let x = 0;
+        while (x < num) {
+          if (x * x * x >= num) {
+            return x.toPrecision(6);
+            break;
+          }
+          x += 0.000001;
+        }
+      }
+
+      function circumference(num) {
+        return num * Math.PI;
+      }
+
+      function circleArea(num) {
+        return ((num / 2) * (num / 2) * Math.PI).toPrecision(6);
+      }
+
+      input.onchange = function() {
+        var num = input.value;
+        if (isNaN(num)) {
+          para.textContent = "You need to enter a number!";
+        } else {
+          // string with each function result string on a new line.
+          para.textContent =
+            // squared
+            num + " squared is " + squared(num) + ".\n" + "\n" +
+            // cubed
+            num + " cubed is " +
+            cubed(num) + ".\n" + "\n" +
+            // factorial
+            num + " factorial is " + factorial(num) + ".\n" + "\n" +
+            // cubed root
+            "The cubed root of " + num + " is " + cubeRoot(num) + ".\n" + "\n" +
+            // circumference
+            "The circumference of circle with a " + num + " unit diameter is " + circumference(num) + " units.\n" + "\n" +
+            // area
+            "The area of circle with a " + num + " unit diameter is " + circleArea(num) + " square units.\n" + "\n";
+        }
+      };
+    </script>
+  </body>
+</html>

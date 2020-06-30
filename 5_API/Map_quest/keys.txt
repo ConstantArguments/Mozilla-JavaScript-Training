@@ -1,0 +1,14 @@
+My Application’s Keys
+
+Consumer Key:   	nqFd2fhmAu6ptFkQmqYkNi1CwTgQ5r7V
+Consumer Secret: 	FBBZQyGjBGLwMsKZ
+Key Issued:     	Wed, 07/03/2019 - 11:21
+Key Expires:     	Never
+
+
+MapQuestExample’s Keys
+
+Consumer Key:   	jz2wFB5x1alkBr7kCmAinkMdwxmU6zKr
+Consumer Secret: 	BbBV5cyo3JLRPA9X
+Key Issued:     	Wed, 07/03/2019 - 11:22
+Key Expires:    	Never

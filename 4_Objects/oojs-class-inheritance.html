@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Object-oriented Javascript inheritance</title>
+  </head>
+
+  <body>
+    <h1>This is a Javascript Exercise on Objects and Inheritance</h1>
+    <pre>
+        Try Entering the following (one at a time):
+
+        teacher1.name.first;
+        teacher1.interests[0];
+        teacher1.bio();
+        teacher1.subject;
+        teacher1.greeting();
+        teacher1.farewell();
+
+        Then substitute "teacher" for "student" or "person".
+
+        There are a total of 3 teachers, 3 students, and 5 persons.
+
+        Note: Only teachers have subjects.
+    </pre>
+    <div>
+      <label for="jscode">Enter code:</label>
+      <input type="text" id="jscode" />
+      <button>Submit code</button>
+    </div>
+
+    <p></p>
+  </body>
+
+  <script>
+    const input = document.querySelector("input");
+    const btn = document.querySelector("button");
+    const para = document.querySelector("p");
+
+    btn.onclick = function() {
+      let code = input.value;
+      para.textContent = eval(code);
+    };
+  /*
+  The constructor function is JavaScript's version of a class. You'll notice that it has all the features you'd expect in a function,
+  although it doesn't return anything or explicitly create an object — it basically just defines properties and methods.
+  You'll see the this keyword being used here as well — it is basically saying that whenever one of these object instances is created,
+  the object's name property will be equal to the name value passed to the constructor call, and
+  the greeting() method will use the name value passed to the constructor call too.
+
+  Note: A constructor function name usually starts with a capital letter —
+  this convention is used to make constructor functions easier to recognize in code.
+  */
+    // Create Person constructor.
+    function Person(first, last, age, gender, interests) {
+      this.name = {
+        first,
+        last
+      };
+      this.age = age;
+      this.gender = gender;
+      this.interests = interests;
+    }
+
+    // Create Teacher constructor, inheriting from Person Constructor above.
+    function Teacher(first, last, age, gender, interests, subject) {
+      // call() allows you to call a function defined somewhere else, but in the current context.
+      Person.call(this, first, last, age, gender, interests);
+      // subject is not part of genaric Person().
+      this.subject = subject;
+    }
+    // Set Teacher.prototype's constructor property equal to Person().
+    Teacher.prototype = Object.create(Person.prototype);
+
+    // Teacher.prototype.constructor will return Teacher(), and now inheriting from Person()
+    Object.defineProperty(Teacher.prototype, "constructor", {
+      value: Teacher,
+      enumerable: false, // so that it does not appear in 'for in' loop
+      writable: true
+    });
+
+    // Create Student constructor, inheriting from Person Constructor above.
+    function Student(first, last, age, gender, interests) {
+      Person.call(this, first, last, age, gender, interests);
+    }
+    Student.prototype = Object.create(Person.prototype);
+
+    Object.defineProperty(Teacher.prototype, "constructor", {
+      value: Student,
+      enumerable: false,
+      writeable: true
+    });
+  /*
+  Adds a new methods to the Person constructor's prototype property.
+
+  Note: It is a fairly common pattern for more object definitions is to define the properties inside the constructor,
+  and the methods on the prototype. This makes the code easier to read, as the constructor only contains
+  the property definitions, and the methods are split off into separate blocks.
+  */
+    Person.prototype.greeting = function() {
+      alert("Hi! I'm " + this.name.first + ".");
+    };
+
+    Person.prototype.farewell = function() {
+      alert(this.name.first + " has left the building. Bye for now!");
+    };
+
+    Person.prototype.bio = function() {
+      // define string.
+      let aboutMe =
+        this.name.first +
+        " " +
+        this.name.last +
+        " is " +
+        this.age +
+        " years old. He likes " +
+        this.interestsMe() +
+        ".";
+
+      // returns appropriate gender pronoun in aboutMe string.
+      if (this.gender == "female") {
+        aboutMe = aboutMe.replace("He", "She");
+      } else if (this.gender == "male") {
+        aboutMe = aboutMe;
+      } else {
+        aboutMe = aboutMe.replace("He", "They");
+      }
+
+      alert(aboutMe);
+    };
+
+    // fix for interests quantity > 2 in aboutMe string.
+    Person.prototype.interestsMe = function() {
+      let multiInterests = "";
+      for (let i = 0; i < this.interests.length - 1; i++) {
+        multiInterests = multiInterests + this.interests[i] + ", ";
+      }
+      multiInterests =
+        multiInterests + " and " + this.interests[this.interests.length - 1];
+      return multiInterests;
+    };
+
+    // Add new method to Teacher's constructor prototype.
+    Teacher.prototype.greeting = function() {
+      let prefix = "";
+
+      // returns appropriate gender prefix in greeting string. This method is different than for Person.
+      if (
+        this.gender === "male" ||
+        this.gender === "Male" ||
+        this.gender === "m" ||
+        this.gender === "M"
+      ) {
+        prefix = "Mr.";
+      } else if (
+        this.gender === "female" ||
+        this.gender === "Female" ||
+        this.gender === "f" ||
+        this.gender === "F"
+      ) {
+        prefix = "Ms.";
+      } else {
+        prefix = "Mx.";
+      }
+
+      alert(
+        "Hello. My name is " +
+          prefix +
+          " " +
+          this.name.last +
+          ", and I teach " +
+          this.subject +
+          "."
+      );
+    };
+
+    // Add new method to Students's constructor prototype.
+    Student.prototype.greeting = function() {
+      alert("Yo! I'm " + this.name.first + ".");
+    };
+  /*
+  In each case, below, the new keyword is used to tell the browser we want to create a new object instance, followed by the function name
+  with its required parameters contained in parentheses, and the result is stored in a variable.
+  */
+
+    // Persons
+    let person1 = new Person("Bob", "Baker", 32, "male", ["music", "skiing"]);
+    let person2 = new Person("Sarah", "Silver", 38, "female", [
+      "music",
+      "skiing",
+      "books",
+      "typewriters"
+    ]);
+    let person3 = new Person("Allen", "Arkin", 22, "male", [
+      "music",
+      "skiing",
+      "chaps",
+      "baking"
+    ]);
+    let person4 = new Person("Pat", "Jameson", 63, "non-binary", [
+      "music",
+      "skiing",
+      "hot fruit"
+    ]);
+    let person5 = new Person("Tammi", "Smith", 17, "female", [
+      "music",
+      "skiing",
+      "kickboxing"
+    ]);
+
+    // Teachers
+    let teacher1 = new Teacher(
+      "Dave",
+      "Griffiths",
+      31,
+      "male",
+      ["football", "cookery"],
+      "Mathematics"
+    );
+    let teacher2 = new Teacher(
+      "Amy",
+      "Farthing",
+      46,
+      "female",
+      ["kick-boxing", "cliff-diving"],
+      "Social Studies"
+    );
+    let teacher3 = new Teacher(
+      "Chase",
+      "Wipple",
+      46,
+      "non-binary",
+      ["Kung-Fu movies", "coffee"],
+      "Civics"
+    );
+
+    // Students
+    let student1 = new Student("Kmnop", "Orangejello", 13, "female", [
+      "the mall",
+      "instagram",
+      '"like, boys that are mature"'
+    ]);
+  </script>
+</html>

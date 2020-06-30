@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Object-oriented Javascript inheritance</title>
+</head>
+
+<body>
+  <h1>This is a Javascript Exercise on Objects and Inheritance</h1>
+  <pre>
+        Try Entering the following (one at a time):
+
+        teacher1.name.first;
+        teacher1.interests[0];
+        teacher1.bio();
+        teacher1.subject;
+        teacher1.greeting();
+        teacher1.farewell();
+
+        Then substitute "teacher" for "student" or "person".
+
+        There are a total of 3 teachers, 3 students, and 5 persons.
+
+        Note: Only teachers have subjects.
+    </pre>
+  <div>
+    <label for="jscode">Enter code:</label>
+    <input type="text" id="jscode" />
+    <button>Submit code</button>
+  </div>
+
+  <p></p>
+</body>
+
+<script>
+  const input = document.querySelector("input");
+  const btn = document.querySelector("button");
+  const para = document.querySelector("p");
+
+  btn.onclick = function () {
+    let code = input.value;
+    para.textContent = eval(code);
+  };
+  // Create Person constructor. Class Methods underneath, inside class {}.
+  class Person {
+    constructor(first, last, age, gender, interests) {
+      this.name = {
+        first,
+        last
+      };
+      this.age = age;
+      this.gender = gender;
+      this.interests = interests;
+    }
+
+    greeting() {
+      // Written with template literals rather than string concatenation to make the code easier to read.
+      alert(`Hi! I'm ${this.name.first}.`);
+    }
+
+    farewell() {
+      alert(`${this.name.first} has left the building. Bye for now!`);
+    }
+
+    bio() {
+      let aboutMe = `${this.name.first} ${this.name.last} is ${this.age} years old. He likes ${this.interestsMe()}.`;
+
+      if (
+        this.gender == "female" ||
+        this.gender == "Female" ||
+        this.gender == "f" ||
+        this.gender == "F"
+      ) {
+        aboutMe = aboutMe.replace("He", "She");
+      } else if (
+        this.gender == "male" ||
+        this.gender == "Male" ||
+        this.gender == "m" ||
+        this.gender == "M"
+      ) {
+        aboutMe = aboutMe;
+      } else {
+        aboutMe = aboutMe.replace("He", "They");
+      }
+
+      alert(aboutMe);
+    }
+
+    interestsMe() {
+      let multiInterests = "";
+      for (let i = 0; i < this.interests.length - 1; i++) {
+        multiInterests = `${multiInterests} ${this.interests[i]}, `;
+      }
+      multiInterests = `${multiInterests} and ${
+        this.interests[this.interests.length - 1]
+        }`;
+      return multiInterests;
+    }
+  }
+
+  // Create Teacher class, inheriting from Person Constructor above.
+  class Teacher extends Person {
+    constructor(first, last, age, gender, interests, subject, grade) {
+      // The super() operator is actually the parent class constructor, passing it the necessary arguments of the
+      //Parent class constructor will also initialize the parent class properties in our sub-class, thereby inheriting it.
+      super(first, last, age, gender, interests); // Now `this` is initialized by calling the parent constructor.
+      // use _ to create a separate value in which to store our name property.
+      // Without using this convention, we would get errors every time we called get or set.
+      this._subject = subject;
+      this.grade = grade;
+    }
+    // There may be times when we want to change the values of an attribute in the classes we create
+    // or we don't know what the final value of an attribute will be. Use get and set.
+    get subject() {
+      return this._subject;
+    }
+
+    set subject(newSubject) {
+      this._subject = newSubject;
+    }
+
+    greeting() {
+      let prefix = "";
+
+      // returns appropriate gender prefix in greeting string. This method is different than for Person's gender.
+      if (
+        this.gender === "male" ||
+        this.gender === "Male" ||
+        this.gender === "m" ||
+        this.gender === "M"
+      ) {
+        prefix = "Mr.";
+      } else if (
+        this.gender === "female" ||
+        this.gender === "Female" ||
+        this.gender === "f" ||
+        this.gender === "F"
+      ) {
+        prefix = "Ms.";
+      } else {
+        prefix = "Mx.";
+      }
+
+      alert(
+        `Hello. My name is ${prefix} ${this.name.last} and I teach ${this.subject}.`
+      );
+    }
+  }
+
+  // Create Student class constructor, inheriting from Person Constructor above.
+  class Student extends Person {
+    constructor(first, last, age, gender, interests) {
+      super(first, last, age, gender, interests);
+    }
+
+    greeting() {
+      alert(`Yo! I'm ${this.name.first}.`);
+    }
+  }
+
+  // Persons
+  let person1 = new Person("Bob", "Baker", 32, "male", ["music", "skiing"]);
+  let person2 = new Person("Sarah", "Silver", 38, "female", [
+    "music",
+    "skiing",
+    "books",
+    "typewriters"
+  ]);
+  let person3 = new Person("Allen", "Arkin", 22, "male", [
+    "music",
+    "skiing",
+    "chaps",
+    "baking"
+  ]);
+  let person4 = new Person("Pat", "Jameson", 63, "non-binary", [
+    "music",
+    "skiing",
+    "hot fruit"
+  ]);
+  let person5 = new Person("Tammi", "Smith", 17, "female", [
+    "music",
+    "skiing",
+    "kickboxing"
+  ]);
+
+  // Teachers
+  let teacher1 = new Teacher(
+    "Dave",
+    "Griffiths",
+    31,
+    "male",
+    ["football", "cookery"],
+    "Mathematics",
+    9
+  );
+  let teacher2 = new Teacher(
+    "Amy",
+    "Farthing",
+    46,
+    "female",
+    ["kick-boxing", "cliff-diving"],
+    "Social Studies",
+    7
+  );
+  let teacher3 = new Teacher(
+    "Chase",
+    "Wipple",
+    46,
+    "non-binary",
+    ["Kung-Fu movies", "coffee"],
+    "Civics",
+    8
+  );
+  let teacher4 = new Teacher(
+    "Severus",
+    "Snape",
+    58,
+    "male",
+    ["Potions", "the Slug Club"],
+    "Dark arts",
+    7
+  );
+
+  // Students
+  let student1 = new Student("Kmnop", "Orangejello", 13, "female", [
+    "the mall",
+    "instagram",
+    '"like, boys that are mature"'
+  ]);
+</script>
+
+</html>

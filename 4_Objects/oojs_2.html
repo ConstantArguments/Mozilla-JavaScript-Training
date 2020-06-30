@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Object-oriented JavaScript example 2</title>
+  </head>
+
+  <body>
+    <p>
+      This example requires you to enter commands in your browser's JavaScript
+      console (see
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools"
+      >
+        What are browser developer tools
+      </a>
+      for more information).
+    </p>
+  </body>
+
+  <script>
+    /*
+  The constructor function is JavaScript's version of a class. You'll notice that it has all the features you'd expect in a function,
+  although it doesn't return anything or explicitly create an object — it basically just defines properties and methods.
+  You'll see the this keyword being used here as well — it is basically saying that whenever one of these object instances is created,
+  the object's name property will be equal to the name value passed to the constructor call, and
+  the greeting() method will use the name value passed to the constructor call too.
+
+  Note: A constructor function name usually starts with a capital letter —
+  this convention is used to make constructor functions easier to recognize in code.
+  */
+    function Person(first, last, age, gender, interests) {
+      this.name = {
+        first: first,
+        last: last
+      };
+      this.age = age;
+      this.gender = gender;
+      this.interests = interests;
+      this.bio = function() {
+        // define string.
+        let aboutMe =
+          this.name.first +
+          " " +
+          this.name.last +
+          " is " +
+          this.age +
+          " years old. He likes " +
+          this.interestsMe() +
+          ".";
+
+        // fixes gender pronoun in aboutMe string.
+        if (this.gender == "female") {
+          aboutMe = aboutMe.replace("He", "She");
+        } else if (this.gender == "male") {
+          aboutMe = aboutMe;
+        } else {
+          aboutMe = aboutMe.replace("He", "They");
+        }
+
+        alert(aboutMe);
+      };
+      this.greeting = function() {
+        alert("Hi! I'm " + this.name.first + ".");
+      };
+
+      // fix for interests > 2 in aboutMe string.
+      this.interestsMe = function() {
+        let multiInterests = "";
+        for (let i = 0; i < this.interests.length - 1; i++) {
+          multiInterests = multiInterests + this.interests[i] + ", ";
+        }
+        multiInterests =
+          multiInterests + " and " + this.interests[this.interests.length - 1];
+        return multiInterests;
+      };
+    }
+    /*
+  In each case, below, the new keyword is used to tell the browser we want to create a new object instance, followed by the function name
+  with its required parameters contained in parentheses, and the result is stored in a variable.
+  */
+    let person1 = new Person("Bob", "Baker", 32, "male", ["music", "skiing"]);
+    let person2 = new Person("Sarah", "Silver", 38, "female", [
+      "music",
+      "skiing",
+      "books",
+      "typewriters"
+    ]);
+    let person3 = new Person("Allen", "Arkin", 22, "male", [
+      "music",
+      "skiing",
+      "chaps",
+      "baking"
+    ]);
+    let person4 = new Person("Pat", "Jameson", 63, "non-binary", [
+      "music",
+      "skiing",
+      "hot fruit"
+    ]);
+  </script>
+</html>

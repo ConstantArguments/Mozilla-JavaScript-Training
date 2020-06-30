@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Canvas</title>
+    <style>
+      body {
+        /* removes scroll bars */
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas class="myCanvas">
+      <p>Add suitable fallback text here.</p>
+    </canvas>
+    <script>
+      const canvas = document.querySelector(".myCanvas");
+      const width = (canvas.width = window.innerWidth);
+      const height = (canvas.height = window.innerHeight);
+
+      let ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "rgb(0,0,0)";
+      ctx.fillRect(0, 0, width, height);
+
+      // image
+      let image = new Image();
+      image.src = "firefox.png"; // png files are transparent
+      image.onload = function() {
+        ctx.drawImage(image, 50, 50);
+        // Display only a part of the image, or to resize it?
+        // The first parameter is the image reference, as before.
+        // 2 and 3 define the coordinates of the top left corner of the area you want to cut out of the loaded image,
+        // relative to the top-left corner of the image itself. Nothing to the left of the first parameter or above the second will be drawn.
+        // 4 and 5 define the width and height of the area we want to cut out from the original image we loaded.
+        // 6 and 7 define the coordinates at which you want to draw the top-left corner of the cut-out portion of the image,
+        // relative to the top-left corner of the canvas
+        // 8 and 9 define the width and height to draw the cut-out area of the image.
+        // In this case, 90% of original.
+        ctx.drawImage(image, 20, 20, 185, 175, 270, 70, 139, 131);
+        ctx.drawImage(image, 20, 20, 185, 175, 420, 70, 259, 245); // resize up causes pixilation.
+      };
+    </script>
+  </body>
+</html>
